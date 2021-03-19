@@ -1,5 +1,6 @@
 class WinesController < ApplicationController
   before_action :set_wine, only: %i[ show edit update destroy ]
+  before_action :only_strains_availables, only: [:new, :edit]
 
   # GET /wines or /wines.json
   def index
@@ -13,10 +14,12 @@ class WinesController < ApplicationController
   # GET /wines/new
   def new
     @wine = Wine.new
+    #@strains_availables = Strain.where(available: true)
   end
 
   # GET /wines/1/edit
   def edit
+    #@strains_availables = Strain.where(available: true)
   end
 
   # POST /wines or /wines.json
@@ -64,8 +67,14 @@ class WinesController < ApplicationController
       @wine = Wine.find(params[:id])
     end
 
+  def only_strains_availables
+    @strains_availables = Strain.where(available: true)
+  end
+
     # Only allow a list of trusted parameters through.
     def wine_params
       params.require(:wine).permit(:name, {strain_ids: []}, :strains_percent)
     end
+
+
 end
